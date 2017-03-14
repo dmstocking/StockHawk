@@ -28,8 +28,8 @@
             android:exported="false" />
 
         <provider
-            android:name=".data.StockProvider"
-            android:authorities="com.udacity.stockhawk"
+            android:name=".data.generated.StocksProvider"
+            android:authorities="com.udacity.stockhawk.stocks.StocksProvider"
             android:exported="false" />
 
         <service

@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.udacity.stockhawk.R;
-import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.data.StockColumns;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -50,7 +50,7 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
     String getSymbolAtPosition(int position) {
 
         cursor.moveToPosition(position);
-        return cursor.getString(Contract.Quote.POSITION_SYMBOL);
+        return cursor.getString(cursor.getColumnIndex(StockColumns.SYMBOL));
     }
 
     @Override
@@ -67,12 +67,12 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
         cursor.moveToPosition(position);
 
 
-        holder.symbol.setText(cursor.getString(Contract.Quote.POSITION_SYMBOL));
-        holder.price.setText(dollarFormat.format(cursor.getFloat(Contract.Quote.POSITION_PRICE)));
+        holder.symbol.setText(cursor.getString(cursor.getColumnIndex(StockColumns.SYMBOL)));
+        holder.price.setText(dollarFormat.format(cursor.getFloat(cursor.getColumnIndex(StockColumns.PRICE))));
 
 
-        float rawAbsoluteChange = cursor.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE);
-        float percentageChange = cursor.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE);
+        float rawAbsoluteChange = cursor.getFloat(cursor.getColumnIndex(StockColumns.ABSOLUTE_CHANGE));
+        float percentageChange = cursor.getFloat(cursor.getColumnIndex(StockColumns.PERCENTAGE_CHANGE));
 
         if (rawAbsoluteChange > 0) {
             holder.change.setBackgroundResource(R.drawable.percent_change_pill_green);
@@ -128,7 +128,7 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             cursor.moveToPosition(adapterPosition);
-            int symbolColumn = cursor.getColumnIndex(Contract.Quote.COLUMN_SYMBOL);
+            int symbolColumn = cursor.getColumnIndex(StockColumns.SYMBOL);
             clickHandler.onClick(cursor.getString(symbolColumn));
 
         }

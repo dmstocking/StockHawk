@@ -9,8 +9,9 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.data.StockColumns;
+import com.udacity.stockhawk.data.StocksProvider;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -94,18 +95,18 @@ public final class QuoteSyncJob {
                     }
 
                     ContentValues quoteCV = new ContentValues();
-                    quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
-                    quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
-                    quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
-                    quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
-                    quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
+                    quoteCV.put(StockColumns.SYMBOL, symbol);
+                    quoteCV.put(StockColumns.PRICE, price);
+                    quoteCV.put(StockColumns.PERCENTAGE_CHANGE, percentChange);
+                    quoteCV.put(StockColumns.ABSOLUTE_CHANGE, change);
+//                    quoteCV.put(StockColumns.HISTORY, historyBuilder.toString());
                     quoteCVs.add(quoteCV);
                 }
             }
 
             context.getContentResolver()
                     .bulkInsert(
-                            Contract.Quote.URI,
+                            StocksProvider.Stocks.STOCKS,
                             quoteCVs.toArray(new ContentValues[quoteCVs.size()]));
 
             Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED);

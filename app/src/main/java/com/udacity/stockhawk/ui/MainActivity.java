@@ -20,8 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.udacity.stockhawk.R;
-import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.data.StocksProvider;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
 
 import butterknife.BindView;
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 String symbol = adapter.getSymbolAtPosition(viewHolder.getAdapterPosition());
                 PrefUtils.removeStock(MainActivity.this, symbol);
-                getContentResolver().delete(Contract.Quote.makeUriForStock(symbol), null, null);
+                getContentResolver().delete(StocksProvider.Stocks.withSymbol(symbol), null, null);
             }
         }).attachToRecyclerView(stockRecyclerView);
 
@@ -134,9 +134,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(this,
-                Contract.Quote.URI,
-                Contract.Quote.QUOTE_COLUMNS.toArray(new String[]{}),
-                null, null, Contract.Quote.COLUMN_SYMBOL);
+                                StocksProvider.Stocks.STOCKS,
+                                null,
+                                null,
+                                null,
+                                null);
     }
 
     @Override
