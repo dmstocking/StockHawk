@@ -24,6 +24,7 @@ import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.data.StocksProvider;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
+import com.udacity.stockhawk.ui.widget.StockWidgetProvider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -187,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             PrefUtils.toggleDisplayMode(this);
             setDisplayModeMenuItemIcon(item);
             adapter.notifyDataSetChanged();
+            StockWidgetProvider.updateWidgets(this);
             return true;
         }
         return super.onOptionsItemSelected(item);

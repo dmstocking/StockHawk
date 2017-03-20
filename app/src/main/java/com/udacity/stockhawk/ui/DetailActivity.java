@@ -1,9 +1,6 @@
 package com.udacity.stockhawk.ui;
 
-import android.content.Context;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -38,8 +35,12 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         symbol = getIntent().getStringExtra("symbol");
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
+    }
 
-        getSupportLoaderManager().initLoader(STOCK_LOADER, null, this);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSupportLoaderManager().restartLoader(STOCK_LOADER, null, this);
     }
 
     @Override
@@ -54,12 +55,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-        if (data.getCount() != 0) {
-//            error.setVisibility(View.VISIBLE);
-        }
-
-
         List<Entry> entires = new ArrayList<>();
         while (data.moveToNext()) {
             float price = data.getFloat(data.getColumnIndex(HistoryColumns.PRICE));
