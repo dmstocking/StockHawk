@@ -35,12 +35,19 @@ public final class StocksProvider {
     @TableEndpoint(table = StocksDatabase.HISTORY)
     public static class Histories {
 
+        @ContentUri(
+                path = "histories",
+                type = "vnd.android.cursor.dir/histories",
+                defaultSort = StockColumns.SYMBOL + " ASC")
+        public static final Uri HISTORIES = Uri.parse("content://" + AUTHORITY + "/histories");
+
         @InexactContentUri(
                 path = "histories" + "/*",
                 name = "HISTORY_FROM_SYMBOL",
                 type = "vnd.android.cursor.dir/histories",
                 whereColumn = HistoryColumns.SYMBOL,
-                pathSegment = 1)
+                pathSegment = 1,
+                defaultSort = HistoryColumns.DATE + " ASC")
         public static Uri withSymbol(String symbol) {
             return Uri.parse("content://" + AUTHORITY + "/histories/" + symbol);
         }

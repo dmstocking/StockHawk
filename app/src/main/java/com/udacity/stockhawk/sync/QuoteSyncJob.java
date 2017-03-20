@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.udacity.stockhawk.data.HistoryColumns;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.data.StockColumns;
 import com.udacity.stockhawk.data.StocksProvider;
@@ -68,6 +69,7 @@ public final class QuoteSyncJob {
             Timber.d(quotes.toString());
 
             ArrayList<ContentValues> quoteCVs = new ArrayList<>();
+            ArrayList<ContentValues> historyCVs = new ArrayList<>();
 
             while (iterator.hasNext()) {
                 String symbol = iterator.next();
@@ -85,13 +87,12 @@ public final class QuoteSyncJob {
                     // The request will hang forever X_x
                     List<HistoricalQuote> history = stock.getHistory(from, to, Interval.WEEKLY);
 
-                    StringBuilder historyBuilder = new StringBuilder();
-
                     for (HistoricalQuote it : history) {
-                        historyBuilder.append(it.getDate().getTimeInMillis());
-                        historyBuilder.append(", ");
-                        historyBuilder.append(it.getClose());
-                        historyBuilder.append("\n");
+                        ContentValues historyCV = new ContentValues();
+                        historyCV.put(HistoryColumns.SYMBOL, symbol);
+                        historyCV.put(HistoryColumns.PRICE, it.getClose().doubleValue());
+                        historyCV.put(HistoryColumns.DATE, it.getDate().getTimeInMillis());
+                        historyCVs.add(historyCV);
                     }
 
                     ContentValues quoteCV = new ContentValues();
@@ -99,7 +100,6 @@ public final class QuoteSyncJob {
                     quoteCV.put(StockColumns.PRICE, price);
                     quoteCV.put(StockColumns.PERCENTAGE_CHANGE, percentChange);
                     quoteCV.put(StockColumns.ABSOLUTE_CHANGE, change);
-//                    quoteCV.put(StockColumns.HISTORY, historyBuilder.toString());
                     quoteCVs.add(quoteCV);
                 }
             }
@@ -108,6 +108,11 @@ public final class QuoteSyncJob {
                     .bulkInsert(
                             StocksProvider.Stocks.STOCKS,
                             quoteCVs.toArray(new ContentValues[quoteCVs.size()]));
+
+            context.getContentResolver()
+                    .bulkInsert(
+                            StocksProvider.Histories.HISTORIES,
+                            historyCVs.toArray(new ContentValues[historyCVs.size()]));
 
             Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED);
             context.sendBroadcast(dataUpdatedIntent);
