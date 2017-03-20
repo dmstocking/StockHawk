@@ -33,5 +33,6 @@
     <string name="toast_no_connectivity">Will refresh when network available.</string>
     <string name="empty_stock_list">No Stocks\nAdds Stocks to View</string>
     <string name="title_widget_stock">Stocks</string>
+    <string name="main.add_stock.content_description">Add Stock</string>
 
 </resources>
