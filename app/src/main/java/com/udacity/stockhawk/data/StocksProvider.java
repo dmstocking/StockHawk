@@ -24,7 +24,7 @@ public final class StocksProvider {
         @InexactContentUri(
                 path = "stocks" + "/*",
                 name = "STOCK_FROM_SYMBOL",
-                type = "vnd.android.cursor.item/stock",
+                type = "vnd.android.cursor.item/stocks",
                 whereColumn = StockColumns.SYMBOL,
                 pathSegment = 1)
         public static Uri withSymbol(String symbol) {

@@ -13,6 +13,7 @@ import com.udacity.stockhawk.data.HistoryColumns;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.data.StockColumns;
 import com.udacity.stockhawk.data.StocksProvider;
+import com.udacity.stockhawk.ui.widget.StockWidgetProvider;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -116,6 +117,8 @@ public final class QuoteSyncJob {
 
             Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED);
             context.sendBroadcast(dataUpdatedIntent);
+
+            StockWidgetProvider.updateWidgets(context);
 
         } catch (IOException exception) {
             Timber.e(exception, "Error fetching stock quotes");

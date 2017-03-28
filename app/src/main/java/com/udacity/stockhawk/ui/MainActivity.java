@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 String symbol = adapter.getSymbolAtPosition(viewHolder.getAdapterPosition());
                 PrefUtils.removeStock(MainActivity.this, symbol);
                 getContentResolver().delete(StocksProvider.Stocks.withSymbol(symbol), null, null);
+                StockWidgetProvider.updateWidgets(MainActivity.this);
             }
         }).attachToRecyclerView(stockRecyclerView);
 
